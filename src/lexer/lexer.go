@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"log"
 	"whirlpool/src/token"
 )
 
@@ -28,7 +27,6 @@ func (l *Lexer) NextToken() token.Token {
 	switch l.ch {
 	case ' ':
 		l.readChar()
-		log.Print("Skipping white space")
 		return l.NextToken()
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
@@ -40,13 +38,13 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.EOF, l.ch)
 	default:
 		if isLetter(l.ch) {
-			tok = l.getIdentifier()
+			return l.getIdentifier()
 		} else if isNumber(l.ch) {
-			tok = l.getNumber()
+			return l.getNumber()
 		} else if isFlowOperator(l.input, l.position) {
-			tok = l.getFlowOperator()
+			return l.getFlowOperator()
 		} else {
-			tok = token.Token{
+			return token.Token{
 				Type:    token.ILLEGAL,
 				Literal: "Token not valid",
 			}
@@ -69,17 +67,16 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) getIdentifier() token.Token {
-	literal := string(l.ch)
+	init := l.position
 	var tok token.Token
 
-	for l.position < len(l.input)-1 && (isLetter(l.input[l.position+1]) || isNumber(l.input[l.position+1])) {
+	for l.position < len(l.input) && (isLetter(l.ch) || isNumber(l.ch)) {
 		l.readChar()
-		literal += string(l.ch)
 	}
 
-	tok.Literal = literal
+	tok.Literal = l.input[init:l.position]
 
-	switch literal {
+	switch tok.Literal {
 	case "siphon":
 		tok.Type = token.SIPHON
 	case "flicker":
@@ -93,7 +90,8 @@ func (l *Lexer) getIdentifier() token.Token {
 	return tok
 }
 func (l *Lexer) getFlowOperator() token.Token {
-	// Skip one
+	// Skip two
+	l.readChar()
 	l.readChar()
 	return token.Token{
 		Type:    token.FLOW_OPERATOR,
@@ -101,16 +99,15 @@ func (l *Lexer) getFlowOperator() token.Token {
 	}
 }
 func (l *Lexer) getNumber() token.Token {
-	literal := string(l.ch)
+	init := l.position
 
-	for l.position < len(l.input)-1 && isNumber(l.input[l.position+1]) {
+	for l.position < len(l.input) && isNumber(l.ch) {
 		l.readChar()
-		literal += string(l.ch)
 	}
 
 	return token.Token{
 		Type:    token.INT,
-		Literal: literal,
+		Literal: l.input[init:l.position],
 	}
 }
 func isLetter(ch byte) bool {
