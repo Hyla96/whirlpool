@@ -6,7 +6,7 @@ import (
 )
 
 func TestNextToken1(t *testing.T) {
-	input := `=><`
+	input := `=><+-*/!`
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
@@ -14,6 +14,11 @@ func TestNextToken1(t *testing.T) {
 		{token.ASSIGN, "="},
 		{token.GREATER_THAN, ">"},
 		{token.LESS_THAN, "<"},
+		{token.SUM, "+"},
+		{token.SUBTRACT, "-"},
+		{token.MULTIPLY, "*"},
+		{token.DIVIDE, "/"},
+		{token.NOT, "!"},
 	}
 
 	testInput(t, input, tests)
@@ -30,7 +35,7 @@ func TestNextToken2(t *testing.T) {
 		{token.IDENT, "num"},
 		{token.GREATER_THAN, ">"},
 		{token.INT, "10"},
-		{token.FLOW_OPERATOR, "->"},
+		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},
 	}
 
@@ -48,7 +53,7 @@ func TestNextToken3(t *testing.T) {
 		{token.IDENT, "num"},
 		{token.GREATER_THAN, ">"},
 		{token.INT, "10"},
-		{token.FLOW_OPERATOR, "->"},
+		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},
 	}
 
@@ -65,7 +70,7 @@ func TestNextToken4(t *testing.T) {
 		{token.IDENT, "num2"},
 		{token.GREATER_THAN, ">"},
 		{token.INT, "10"},
-		{token.FLOW_OPERATOR, "->"},
+		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},
 	}
 

@@ -21,37 +21,33 @@ func New(input string) *Lexer {
 	return l
 }
 
-func (l *Lexer) NextToken() token.Token {
-	var tok token.Token
-
+func (l *Lexer) NextToken() *token.Token {
 	l.consumeWhitespace()
 
-	switch l.ch {
-	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
-	case '>':
-		tok = newToken(token.GREATER_THAN, l.ch)
-	case '<':
-		tok = newToken(token.LESS_THAN, l.ch)
-	case 0:
-		tok = newToken(token.EOF, l.ch)
-	default:
-		if isLetter(l.ch) {
-			return l.getIdentifier()
-		} else if isNumber(l.ch) {
-			return l.getNumber()
-		} else if isFlowOperator(l.input, l.position) {
-			return l.getFlowOperator()
-		} else {
-			return token.Token{
-				Type:    token.ILLEGAL,
-				Literal: "Token not valid",
-			}
-		}
+	var tok *token.Token
+
+	tok = l.getDoubleCharacter()
+	if tok != nil {
+		return tok
 	}
 
-	l.readChar()
-	return tok
+	tok = l.getSingleCharacter()
+	if tok != nil {
+		return tok
+	}
+
+	if isLetter(l.ch) {
+		return l.getIdentifier()
+	}
+
+	if isNumber(l.ch) {
+		return l.getNumber()
+	}
+
+	return &token.Token{
+		Type:    token.ILLEGAL,
+		Literal: "Token not valid",
+	}
 }
 
 func (l *Lexer) readChar() {
@@ -65,35 +61,87 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
-func (l *Lexer) getIdentifier() token.Token {
+func (l *Lexer) getSingleCharacter() *token.Token {
+	var tok *token.Token
+
+	switch l.ch {
+	case '=':
+		tok = newToken(token.ASSIGN, l.ch)
+	case '>':
+		tok = newToken(token.GREATER_THAN, l.ch)
+	case '<':
+		tok = newToken(token.LESS_THAN, l.ch)
+	case '+':
+		tok = newToken(token.SUM, l.ch)
+	case '-':
+		tok = newToken(token.SUBTRACT, l.ch)
+	case '*':
+		tok = newToken(token.MULTIPLY, l.ch)
+	case '/':
+		tok = newToken(token.DIVIDE, l.ch)
+	case '!':
+		tok = newToken(token.NOT, l.ch)
+	case 0:
+		tok = newToken(token.EOF, l.ch)
+	}
+
+	if tok != nil {
+		l.readChar()
+	}
+
+	return tok
+}
+func (l *Lexer) getDoubleCharacter() *token.Token {
+	if len(l.input)-l.position < 2 {
+		return nil
+	}
+
+	var tok *token.Token
+
+	literal := string(l.input[l.position])
+	literal += string(l.input[l.position+1])
+
+	switch literal {
+	case "==":
+		tok = &token.Token{Type: token.EQUAL, Literal: literal}
+	case "!=":
+		tok = &token.Token{Type: token.NOT_EQUAL, Literal: literal}
+	case ">=":
+		tok = &token.Token{Type: token.GREATER_THAN_OR_EQUAL, Literal: literal}
+	case "<=":
+		tok = &token.Token{Type: token.LESS_THAN_OR_EQUAL, Literal: literal}
+	case "->":
+		tok = &token.Token{Type: token.FLOW, Literal: literal}
+	}
+
+	if tok != nil {
+		l.readChar()
+		l.readChar()
+	}
+
+	return tok
+}
+
+func (l *Lexer) getIdentifier() *token.Token {
 	init := l.position
 
 	for l.position < len(l.input) && (isLetter(l.ch) || isNumber(l.ch)) {
 		l.readChar()
 	}
 
-	return token.Token{
+	return &token.Token{
 		Type:    token.LookupIdent(l.input[init:l.position]),
 		Literal: l.input[init:l.position],
 	}
 }
-func (l *Lexer) getFlowOperator() token.Token {
-	// Skip two
-	l.readChar()
-	l.readChar()
-	return token.Token{
-		Type:    token.FLOW_OPERATOR,
-		Literal: "->",
-	}
-}
-func (l *Lexer) getNumber() token.Token {
+func (l *Lexer) getNumber() *token.Token {
 	init := l.position
 
 	for l.position < len(l.input) && isNumber(l.ch) {
 		l.readChar()
 	}
 
-	return token.Token{
+	return &token.Token{
 		Type:    token.INT,
 		Literal: l.input[init:l.position],
 	}
@@ -108,16 +156,11 @@ func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'
 }
 
-func isFlowOperator(input string, position int) bool {
-	literal := string(input[position])
-	literal += string(input[position+1])
-	return literal == "->"
-}
 func isNumber(ch byte) bool {
 	return '0' <= ch && ch <= '9'
 }
-func newToken(t token.TokenType, ch byte) token.Token {
-	return token.Token{
+func newToken(t token.TokenType, ch byte) *token.Token {
+	return &token.Token{
 		Type:    t,
 		Literal: string(ch),
 	}
