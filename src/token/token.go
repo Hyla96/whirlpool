@@ -12,7 +12,7 @@ const (
 	EOF     TokenType = "EOF"
 
 	// Keywords
-	SYPHON  TokenType = "SYPHON"
+	SIPHON  TokenType = "SIPHON"
 	FLICKER TokenType = "FLICKER"
 	CYCLONE TokenType = "CYCLONE"
 

@@ -5,27 +5,55 @@ import (
 	"whirlpool/src/token"
 )
 
-func TestNextToken(t *testing.T) {
-	input := `siphon num > 10 -> pipe`
-
+func TestNextToken1(t *testing.T) {
+	input := `=><`
 	tests := []struct {
-		expetedType     token.TokenType
+		expectedType    token.TokenType
 		expectedLiteral string
 	}{
 		{token.ASSIGN, "="},
+		{token.GREATER_THAN, ">"},
+		{token.LESS_THAN, "<"},
 	}
 
+	testInput(t, input, tests)
+}
+
+func TestNextToken2(t *testing.T) {
+	input := `siphon num > 10 -> pipe`
+
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+		{token.SIPHON, "siphon"},
+		{token.IDENT, "num"},
+		{token.GREATER_THAN, ">"},
+		{token.INT, "10"},
+		{token.FLOW_OPERATOR, "->"},
+		{token.IDENT, "pipe"},
+	}
+
+	testInput(t, input, tests)
+}
+
+func testInput(t *testing.T, input string, tests []struct {
+	expectedType    token.TokenType
+	expectedLiteral string
+}) {
 	l := New(input)
 
-	for index, value := range tests {
+	for _, value := range tests {
 		tok := l.NextToken()
 
-		if tok.Type != value.expetedType {
-			t.Fatalf("Token type wrong. Received %q and expected %q", tok.Type, value.expetedType)
+		if tok.Type != value.expectedType {
+			t.Fatalf("Token type wrong. Received %q and expected %q", tok.Type, value.expectedType)
 		}
 
 		if tok.Literal != value.expectedLiteral {
 			t.Fatalf("Token literal wrong. Received %q and expected %q", tok.Literal, value.expectedLiteral)
 		}
+
+		t.Logf("Successfully read %q as %q", tok.Literal, tok.Type)
 	}
 }

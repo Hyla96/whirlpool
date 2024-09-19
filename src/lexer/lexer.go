@@ -23,6 +23,9 @@ func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
 	switch l.ch {
+	case ' ':
+		l.readChar()
+		return l.NextToken()
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
 	case '>':
@@ -31,8 +34,18 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LESS_THAN, l.ch)
 	case 0:
 		tok = newToken(token.EOF, l.ch)
+	default:
+		if isLetter(l.ch) {
+			return l.getIdentifier()
+		}
+
+		return token.Token{
+			Type:    token.ILLEGAL,
+			Literal: "Token not valid",
+		}
 	}
 
+	l.readChar()
 	return tok
 }
 
@@ -47,6 +60,34 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
+func (l *Lexer) getIdentifier() token.Token {
+	ident := ""
+	var tok token.Token
+
+	for isLetter(l.ch) {
+		ident += string(l.ch)
+		l.readChar()
+	}
+
+	tok.Literal = ident
+
+	switch ident {
+	case "siphon":
+		tok.Type = token.SIPHON
+	case "flicker":
+		tok.Type = token.FLICKER
+	case "cyclone":
+		tok.Type = token.CYCLONE
+	default:
+		tok.Type = token.IDENT
+	}
+
+	return tok
+}
+
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'
+}
 func newToken(t token.TokenType, ch byte) token.Token {
 	return token.Token{
 		Type:    t,
