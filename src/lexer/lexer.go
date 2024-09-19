@@ -1,6 +1,9 @@
 package lexer
 
-import "whirlpool/src/token"
+import (
+	"log"
+	"whirlpool/src/token"
+)
 
 type Lexer struct {
 	input        string
@@ -25,6 +28,7 @@ func (l *Lexer) NextToken() token.Token {
 	switch l.ch {
 	case ' ':
 		l.readChar()
+		log.Print("Skipping white space")
 		return l.NextToken()
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
@@ -65,12 +69,12 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) getIdentifier() token.Token {
-	literal := ""
+	literal := string(l.ch)
 	var tok token.Token
 
-	for isLetter(l.ch) || isNumber(l.ch) {
-		literal += string(l.ch)
+	for l.position < len(l.input)-1 && (isLetter(l.input[l.position+1]) || isNumber(l.input[l.position+1])) {
 		l.readChar()
+		literal += string(l.ch)
 	}
 
 	tok.Literal = literal
@@ -97,11 +101,11 @@ func (l *Lexer) getFlowOperator() token.Token {
 	}
 }
 func (l *Lexer) getNumber() token.Token {
-	literal := ""
+	literal := string(l.ch)
 
-	for isNumber(l.ch) {
-		literal += string(l.ch)
+	for l.position < len(l.input)-1 && isNumber(l.input[l.position+1]) {
 		l.readChar()
+		literal += string(l.ch)
 	}
 
 	return token.Token{
