@@ -24,10 +24,9 @@ func New(input string) *Lexer {
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
+	l.consumeWhitespace()
+
 	switch l.ch {
-	case ' ':
-		l.readChar()
-		return l.NextToken()
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
 	case '>':
@@ -97,6 +96,12 @@ func (l *Lexer) getNumber() token.Token {
 	return token.Token{
 		Type:    token.INT,
 		Literal: l.input[init:l.position],
+	}
+}
+
+func (l *Lexer) consumeWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
 	}
 }
 func isLetter(ch byte) bool {

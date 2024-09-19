@@ -38,7 +38,7 @@ func TestNextToken2(t *testing.T) {
 }
 
 func TestNextToken3(t *testing.T) {
-	input := `siphon num>10->pipe`
+	input := "siphon num\n>10         ->pipe"
 
 	tests := []struct {
 		expectedType    token.TokenType

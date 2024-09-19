@@ -7,16 +7,16 @@ type Token struct {
 }
 
 func LookupIdent(ident string) TokenType {
-	switch ident {
-	case "siphon":
-		return SIPHON
-	case "flicker":
-		return FLICKER
-	case "cyclone":
-		return CYCLONE
-	default:
-		return IDENT
+	if tok, ok := keywords[ident]; ok {
+		return tok
 	}
+	return IDENT
+}
+
+var keywords = map[string]TokenType{
+	"siphon":  SIPHON,
+	"flicker": FLICKER,
+	"cyclone": CYCLONE,
 }
 
 const (
