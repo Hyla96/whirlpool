@@ -54,6 +54,23 @@ func TestNextToken3(t *testing.T) {
 
 	testInput(t, input, tests)
 }
+func TestNextToken4(t *testing.T) {
+	input := `siphon num2>10->pipe`
+
+	tests := []struct {
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
+		{token.SIPHON, "siphon"},
+		{token.IDENT, "num2"},
+		{token.GREATER_THAN, ">"},
+		{token.INT, "10"},
+		{token.FLOW_OPERATOR, "->"},
+		{token.IDENT, "pipe"},
+	}
+
+	testInput(t, input, tests)
+}
 
 func testInput(t *testing.T, input string, tests []struct {
 	expectedType    token.TokenType
