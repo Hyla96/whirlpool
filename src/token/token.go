@@ -6,6 +6,19 @@ type Token struct {
 	Literal string
 }
 
+func LookupIdent(ident string) TokenType {
+	switch ident {
+	case "siphon":
+		return SIPHON
+	case "flicker":
+		return FLICKER
+	case "cyclone":
+		return CYCLONE
+	default:
+		return IDENT
+	}
+}
+
 const (
 	// Special
 	ILLEGAL TokenType = "ILLEGAL"

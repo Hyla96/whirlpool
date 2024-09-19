@@ -68,26 +68,15 @@ func (l *Lexer) readChar() {
 
 func (l *Lexer) getIdentifier() token.Token {
 	init := l.position
-	var tok token.Token
 
 	for l.position < len(l.input) && (isLetter(l.ch) || isNumber(l.ch)) {
 		l.readChar()
 	}
 
-	tok.Literal = l.input[init:l.position]
-
-	switch tok.Literal {
-	case "siphon":
-		tok.Type = token.SIPHON
-	case "flicker":
-		tok.Type = token.FLICKER
-	case "cyclone":
-		tok.Type = token.CYCLONE
-	default:
-		tok.Type = token.IDENT
+	return token.Token{
+		Type:    token.LookupIdent(l.input[init:l.position]),
+		Literal: l.input[init:l.position],
 	}
-
-	return tok
 }
 func (l *Lexer) getFlowOperator() token.Token {
 	// Skip two
