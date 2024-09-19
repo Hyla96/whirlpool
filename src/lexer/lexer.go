@@ -68,19 +68,23 @@ func (l *Lexer) getSingleCharacter() *token.Token {
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
 	case '>':
-		tok = newToken(token.GREATER_THAN, l.ch)
+		tok = newToken(token.GT, l.ch)
 	case '<':
-		tok = newToken(token.LESS_THAN, l.ch)
+		tok = newToken(token.LT, l.ch)
 	case '+':
 		tok = newToken(token.SUM, l.ch)
 	case '-':
 		tok = newToken(token.SUBTRACT, l.ch)
 	case '*':
-		tok = newToken(token.MULTIPLY, l.ch)
+		tok = newToken(token.ASTERISK, l.ch)
 	case '/':
-		tok = newToken(token.DIVIDE, l.ch)
+		tok = newToken(token.SLASH, l.ch)
 	case '!':
-		tok = newToken(token.NOT, l.ch)
+		tok = newToken(token.BANG, l.ch)
+	case ';':
+		tok = newToken(token.SEMICOLON, l.ch)
+	case ':':
+		tok = newToken(token.COLON, l.ch)
 	case 0:
 		tok = newToken(token.EOF, l.ch)
 	}
@@ -92,6 +96,9 @@ func (l *Lexer) getSingleCharacter() *token.Token {
 	return tok
 }
 func (l *Lexer) getDoubleCharacter() *token.Token {
+	//TODO: It should be optimized by including this check in the singleCharacter
+	// First you check input[x] and if it matches with doubleCharacter[0] you also check x+1
+	// This is easier to read tho' :)
 	if len(l.input)-l.position < 2 {
 		return nil
 	}
@@ -107,9 +114,9 @@ func (l *Lexer) getDoubleCharacter() *token.Token {
 	case "!=":
 		tok = &token.Token{Type: token.NOT_EQUAL, Literal: literal}
 	case ">=":
-		tok = &token.Token{Type: token.GREATER_THAN_OR_EQUAL, Literal: literal}
+		tok = &token.Token{Type: token.GTE, Literal: literal}
 	case "<=":
-		tok = &token.Token{Type: token.LESS_THAN_OR_EQUAL, Literal: literal}
+		tok = &token.Token{Type: token.LTE, Literal: literal}
 	case "->":
 		tok = &token.Token{Type: token.FLOW, Literal: literal}
 	}

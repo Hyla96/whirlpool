@@ -12,13 +12,13 @@ func TestNextToken1(t *testing.T) {
 		expectedLiteral string
 	}{
 		{token.ASSIGN, "="},
-		{token.GREATER_THAN, ">"},
-		{token.LESS_THAN, "<"},
+		{token.GT, ">"},
+		{token.LT, "<"},
 		{token.SUM, "+"},
 		{token.SUBTRACT, "-"},
-		{token.MULTIPLY, "*"},
-		{token.DIVIDE, "/"},
-		{token.NOT, "!"},
+		{token.ASTERISK, "*"},
+		{token.SLASH, "/"},
+		{token.BANG, "!"},
 	}
 
 	testInput(t, input, tests)
@@ -33,7 +33,7 @@ func TestNextToken2(t *testing.T) {
 	}{
 		{token.SIPHON, "siphon"},
 		{token.IDENT, "num"},
-		{token.GREATER_THAN, ">"},
+		{token.GT, ">"},
 		{token.INT, "10"},
 		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},
@@ -51,7 +51,7 @@ func TestNextToken3(t *testing.T) {
 	}{
 		{token.SIPHON, "siphon"},
 		{token.IDENT, "num"},
-		{token.GREATER_THAN, ">"},
+		{token.GT, ">"},
 		{token.INT, "10"},
 		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},
@@ -68,7 +68,7 @@ func TestNextToken4(t *testing.T) {
 	}{
 		{token.SIPHON, "siphon"},
 		{token.IDENT, "num2"},
-		{token.GREATER_THAN, ">"},
+		{token.GT, ">"},
 		{token.INT, "10"},
 		{token.FLOW, "->"},
 		{token.IDENT, "pipe"},

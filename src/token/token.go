@@ -17,6 +17,8 @@ var keywords = map[string]TokenType{
 	"siphon":  SIPHON,
 	"flicker": FLICKER,
 	"cyclone": CYCLONE,
+	"true":    TRUE,
+	"false":   FALSE,
 }
 
 const (
@@ -28,22 +30,27 @@ const (
 	SIPHON  TokenType = "SIPHON"
 	FLICKER TokenType = "FLICKER"
 	CYCLONE TokenType = "CYCLONE"
+	TRUE    TokenType = "TRUE"
+	FALSE   TokenType = "FALSE"
 
 	// Single Character Operators
-	ASSIGN       TokenType = "="
-	GREATER_THAN TokenType = ">"
-	LESS_THAN    TokenType = "<"
-	SUM          TokenType = "+"
-	SUBTRACT     TokenType = "-"
-	MULTIPLY     TokenType = "*"
-	DIVIDE       TokenType = "/"
-	NOT          TokenType = "!"
+	ASSIGN    TokenType = "="
+	GT        TokenType = ">"
+	LT        TokenType = "<"
+	SUM       TokenType = "+"
+	SUBTRACT  TokenType = "-"
+	ASTERISK  TokenType = "*"
+	SLASH     TokenType = "/"
+	BANG      TokenType = "!"
+	SEMICOLON TokenType = ";"
+	COLON     TokenType = ";"
+
 	// Double Character Operators
-	FLOW                  TokenType = "->"
-	EQUAL                 TokenType = "=="
-	NOT_EQUAL             TokenType = "!="
-	GREATER_THAN_OR_EQUAL TokenType = ">="
-	LESS_THAN_OR_EQUAL    TokenType = "<="
+	FLOW      TokenType = "->"
+	EQUAL     TokenType = "=="
+	NOT_EQUAL TokenType = "!="
+	GTE       TokenType = ">="
+	LTE       TokenType = "<="
 
 	// Identifiers
 	IDENT TokenType = "IDENT"
