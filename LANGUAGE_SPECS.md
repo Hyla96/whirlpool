@@ -1,6 +1,6 @@
 ## Language Specification 
 If you payed attention to what Claude.ai generated you would have noticed that there is some gold among the garbage.
-Here take out the garbage and polish the gold.
+Here the polished gold.
 
 ---
 
