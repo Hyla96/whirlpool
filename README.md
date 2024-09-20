@@ -15,7 +15,7 @@ Claude.ai:
 
 Sadly [Whir](https://esolangs.org/wiki/Whirl) already exists and it's far too esoteric for my palate, so **Whirlpool** was born.
 
-### The language:
+### Original language specs:
 
 > ---
 > 
