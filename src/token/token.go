@@ -16,6 +16,7 @@ func LookupIdent(ident string) TokenType {
 var keywords = map[string]TokenType{
 	"siphon":  SIPHON,
 	"flicker": FLICKER,
+	"buoy":    BUOY,
 	"cyclone": CYCLONE,
 	"true":    TRUE,
 	"false":   FALSE,
@@ -29,6 +30,7 @@ const (
 	// Keywords
 	SIPHON  TokenType = "SIPHON"
 	FLICKER TokenType = "FLICKER"
+	BUOY    TokenType = "BUOY"
 	CYCLONE TokenType = "CYCLONE"
 	TRUE    TokenType = "TRUE"
 	FALSE   TokenType = "FALSE"
