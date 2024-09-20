@@ -9,7 +9,7 @@ Me:
 > Hey, I want to write a Golang interpreter for a language. Define the specs of a brand new language, it must be simple and innovative. Surprise me!
 
 
-ChatGPT:
+Claude.ai:
 > Alright! Let’s try something innovative and out of the ordinary. Here's a brand new language concept called **"Whirl"**—it’s designed to challenge conventional programming paradigms with simplicity and a unique twist on flow and data manipulation.
 
 
