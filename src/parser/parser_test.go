@@ -33,7 +33,7 @@ func getProgram(input string, t *testing.T) *ast.Program {
 	pars := New(lex)
 
 	program := pars.ParseProgram()
-
+	checkParserError(t, pars)
 	if program == nil {
 		t.Fatal("ParseProgram returned nil")
 	}
@@ -69,4 +69,18 @@ func testBuoyStatement(t *testing.T, statement ast.Statement, expected string) b
 	}
 
 	return true
+}
+
+func checkParserError(t *testing.T, p *Parser) {
+	errors := p.Errors()
+	if len(errors) == 0 {
+		return
+	}
+
+	t.Errorf("parser has %d errors", len(errors))
+
+	for _, msg := range errors {
+		t.Errorf("parser error: %q", msg)
+	}
+	t.FailNow()
 }

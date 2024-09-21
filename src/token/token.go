@@ -18,6 +18,7 @@ var keywords = map[string]TokenType{
 	"flicker": FLICKER,
 	"buoy":    BUOY,
 	"cyclone": CYCLONE,
+	"output":  OUTPUT,
 	"true":    TRUE,
 	"false":   FALSE,
 }
@@ -34,6 +35,7 @@ const (
 	CYCLONE TokenType = "CYCLONE"
 	TRUE    TokenType = "TRUE"
 	FALSE   TokenType = "FALSE"
+	OUTPUT  TokenType = "OUTPUT"
 
 	// Single Character Operators
 	ASSIGN    TokenType = "="

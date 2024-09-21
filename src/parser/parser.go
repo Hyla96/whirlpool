@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"log"
+	"fmt"
 	"whirlpool/src/ast"
 	"whirlpool/src/lexer"
 	"whirlpool/src/token"
@@ -12,10 +12,15 @@ type Parser struct {
 
 	curToken  *token.Token
 	nextToken *token.Token
+
+	errors []string
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l}
+	p := &Parser{
+		l:      l,
+		errors: []string{},
+	}
 
 	p.readToken()
 	p.readToken()
@@ -26,6 +31,15 @@ func New(l *lexer.Lexer) *Parser {
 func (p *Parser) readToken() {
 	p.curToken = p.nextToken
 	p.nextToken = p.l.NextToken()
+}
+
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
+func (p *Parser) nextTokenError(t token.TokenType) {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.nextToken.Type)
+	p.errors = append(p.errors, msg)
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
@@ -58,7 +72,6 @@ func (p *Parser) parseBuoyStatement() *ast.BuoyStatement {
 	}
 
 	if !p.expectNext(token.IDENT) {
-		log.Printf("Expected token of type %q but found %q", token.IDENT, p.nextToken.Type)
 		return nil
 	}
 
@@ -68,7 +81,6 @@ func (p *Parser) parseBuoyStatement() *ast.BuoyStatement {
 	}
 
 	if !p.expectNext(token.ASSIGN) {
-		log.Printf("Expected token of type %q but found %q", token.ASSIGN, p.nextToken.Type)
 		return nil
 	}
 
@@ -95,5 +107,6 @@ func (p *Parser) expectNext(t token.TokenType) bool {
 		return true
 	}
 
+	p.nextTokenError(t)
 	return false
 }

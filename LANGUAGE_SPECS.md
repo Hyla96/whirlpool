@@ -1,19 +1,13 @@
-## Language Specification 
-If you payed attention to what Claude.ai generated you would have noticed that there is some gold among the garbage.
-Here the polished gold.
-
----
-
-### **Whirlpool Language Specification**
+### **Whirlpool Language Specification (Revised)**
 
 #### **1. Flow-Based Programming**
 - **Whirlpool** is built around **data flow** rather than traditional control flow. Programs in Whirlpool look more like a series of transformations, where data moves through **pipes**.
-  
+
 - No traditional loops or if-else blocks, just data transformations and routing.
 
 ---
 
-#### **2. Core Concept: “Spirals” and “Nodes”**
+#### **2. Core Concept: "Spirals" and "Nodes"**
 - The building blocks of Whirlpool are **Spirals** and **Nodes**:
   - **Spirals**: Represent a flow of data, similar to pipelines.
   - **Nodes**: Represent operations that transform data.
@@ -34,17 +28,17 @@ Here the polished gold.
 #### **4. Unique Constructs**
 
 - **Siphons**: Think of these as valves that decide whether data flows through. They are akin to conditional logic, but they operate based on the state of the data:
-  ```Whirlpool
+  ```whirlpool
   siphon num > 10 -> pipe
   ```
 
 - **Flickers**: Temporal states. Data can be stored in **flickers**, a short-term, volatile memory:
-  ```Whirlpool
+  ```whirlpool
   flicker num = 42
   ```
 
 - **Cyclones**: These are accumulators or reducers, pulling together data over several passes:
-  ```Whirlpool
+  ```whirlpool
   cyclone total -> add
   ```
 
@@ -55,14 +49,14 @@ Here the polished gold.
 - **Basic Program Flow:**
   In Whirlpool, code is a series of transformations. For example, to add 1 to a number, filter out the numbers that are even, and print them:
 
-  ```Whirlpool
+  ```whirlpool
   spiral num -> add 1 -> siphon num % 2 != 0 -> output
   ```
 
   In this example, `spiral` represents the flow of numbers, `add 1` adds to each number, the **siphon** filters odd numbers, and `output` prints them.
 
 - **Fibonacci Sequence** (No loops, just flow):
-  ```Whirlpool
+  ```whirlpool
   flicker prev = 0
   flicker curr = 1
 
@@ -76,7 +70,7 @@ Here the polished gold.
 #### **6. Communication and Channels**
 - Data flows continuously through **channels**. Think of them as conveyors of data across different Spirals. Data can be passed from one part of a program to another:
 
-  ```Whirlpool
+  ```whirlpool
   channel num -> spiral_a -> spiral_b
   ```
 
@@ -86,19 +80,19 @@ Here the polished gold.
 
 #### **7. Error Handling**
 - **Glitches**: Instead of exceptions or error codes, Whirlpool uses **Glitches**, which bubble up through Spirals. Glitches must be handled via special **filters**:
-  
-  ```Whirlpool
+
+  ```whirlpool
   glitch -> siphon is_glitch -> recover
   ```
 
-  If an error occurs, it moves through a **glitch** channel, where it’s either handled or allowed to propagate until recovery.
+  If an error occurs, it moves through a **glitch** channel, where it's either handled or allowed to propagate until recovery.
 
 ---
 
 #### **8. Functions and Modularity**
-- Whirlpool doesn’t have functions in the traditional sense. Instead, you define **shapes**, which are reusable flow patterns:
-  
-  ```Whirlpool
+- Whirlpool doesn't have functions in the traditional sense. Instead, you define **shapes**, which are reusable flow patterns:
+
+  ```whirlpool
   shape double -> spiral num -> multiply 2 -> output
   ```
 
@@ -109,7 +103,9 @@ Here the polished gold.
 #### **9. No Variables, Just States**
 - Rather than mutable variables, Whirlpool works with **state transitions**. Data enters a **state** within a Spiral, gets transformed, and moves on. Once data leaves a state, it no longer exists.
 - We do have **flickers** for temporary storage, but they are not persistent.
-- We also have **buoy** for persistent storage, but it's not mutable: ```buoy num = 42;```
+- We also have **buoy** for persistent storage, but it's not mutable: ```whirlpool
+  buoy num = 42
+```
 
 ---
 
@@ -117,21 +113,21 @@ Here the polished gold.
 - Whirlpool is designed to be both text-based and **visual**. The text syntax you write can be directly mapped to a visual representation where **Nodes** are boxes and **Spirals** are arrows. This makes debugging and program understanding much easier.
 
   Example visual for:
-  ```Whirlpool
+  ```whirlpool
   spiral num -> add 1 -> siphon num % 2 != 0 -> output
   ```
 
-  - A circular node labeled "spiral num"
-  - Arrows pointing to transformations: "add 1"
-  - A branch node for "siphon num % 2 != 0"
-  - An endpoint "output"
+- A circular node labeled "spiral num"
+- Arrows pointing to transformations: "add 1"
+- A branch node for "siphon num % 2 != 0"
+- An endpoint "output"
 
 ---
 
 ### Key Innovations
 
 1. **Flow Over Control**: Whirlpool eliminates loops, conditionals, and variables in favor of **flow-based design**. Everything moves continuously through a Spiral.
-  
+
 2. **Temporal Constructs**: Features like **flickers** and **cyclones** introduce temporal states and reduction in a very organic way.
 
 3. **No Functions, Only Shapes**: Instead of the function/method paradigm, reusable logic is encapsulated in **shapes**, which plug directly into the flow of data.
@@ -143,22 +139,20 @@ Here the polished gold.
 ### Example Programs
 
 1. **Prime Numbers**:
-    ```Whirlpool
+    ```whirlpool
     spiral num -> add 1 -> siphon is_prime(num) -> output
     ```
 
 2. **Word Counting in Text**:
-    ```Whirlpool
-    spiral txt -> split " " -> cyclone count -> output count
+    ```whirlpool
+    spiral txt -> split " " -> cyclone count -> output
     ```
 
 3. **HTTP Request (Async by Nature)**:
-    ```Whirlpool
+    ```whirlpool
     channel request -> siphon is_ready -> cyclone response -> output
     ```
 
 ---
 
-With Whirlpool, programming becomes a continuous flow of data, where operations are nodes in a giant feedback loop of transformations. It’s designed to **feel** different from conventional languages, emphasizing movement over static logic.
-
-What do you think of this? It should definitely be a new challenge when writing the interpreter!
+With Whirlpool, programming becomes a continuous flow of data, where operations are nodes in a giant feedback loop of transformations. It's designed to **feel** different from conventional languages, emphasizing movement over static logic.
