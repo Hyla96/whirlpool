@@ -61,10 +61,23 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.BUOY:
 		return p.parseBuoyStatement()
+	case token.OUTPUT:
+		return p.parseOutputStatement()
 	default:
 		return nil
 	}
 
+}
+func (p *Parser) parseOutputStatement() *ast.OutputStatement {
+	stmt := &ast.OutputStatement{
+		Token: p.curToken,
+	}
+
+	for !p.currentTokenIs(token.SEMICOLON) {
+		p.readToken()
+	}
+
+	return stmt
 }
 func (p *Parser) parseBuoyStatement() *ast.BuoyStatement {
 	stmt := &ast.BuoyStatement{

@@ -6,6 +6,38 @@ import (
 	"whirlpool/src/lexer"
 )
 
+func TestOutputStatement1(t *testing.T) {
+	input := `
+	output 5;
+	output 10;
+	output z;
+	`
+	program := getProgram(input, t)
+	//tests := []struct {
+	//	expectedIdentifier string
+	//}{
+	//	{"5"},
+	//	{"10"},
+	//	{"z"},
+	//}
+
+	if len(program.Statements) != 3 {
+		t.Fatalf("ParseProgram returned %q statements instead of 3", len(program.Statements))
+	}
+
+	for _, stmt := range program.Statements {
+		outputStmt, ok := stmt.(*ast.OutputStatement)
+
+		if !ok {
+			t.Errorf("Statement is not output type. got=%T", stmt)
+		}
+
+		if outputStmt.TokenLiteral() != "output" {
+			t.Errorf("literal not output, got %q", stmt.TokenLiteral())
+		}
+	}
+}
+
 func TestBuoyStatement1(t *testing.T) {
 	input := `
 	buoy x = 5;
@@ -13,6 +45,10 @@ func TestBuoyStatement1(t *testing.T) {
 	buoy z = 1001271;
 	`
 	program := getProgram(input, t)
+
+	if len(program.Statements) != 3 {
+		t.Fatalf("ParseProgram returned %q statements instead of 3", len(program.Statements))
+	}
 	tests := []struct {
 		expectedIdentifier string
 	}{
@@ -34,27 +70,24 @@ func getProgram(input string, t *testing.T) *ast.Program {
 
 	program := pars.ParseProgram()
 	checkParserError(t, pars)
+
 	if program == nil {
 		t.Fatal("ParseProgram returned nil")
-	}
-
-	if len(program.Statements) != 3 {
-		t.Fatalf("ParseProgram returned %q statements instead of 3", len(program.Statements))
 	}
 
 	return program
 }
 
-func testBuoyStatement(t *testing.T, statement ast.Statement, expected string) bool {
-	if statement.TokenLiteral() != "buoy" {
-		t.Errorf("TokenLiteral is not buoy. got=%q", statement.TokenLiteral())
+func testBuoyStatement(t *testing.T, stmt ast.Statement, expected string) bool {
+	if stmt.TokenLiteral() != "buoy" {
+		t.Errorf("TokenLiteral is not buoy. got=%q", stmt.TokenLiteral())
 		return false
 	}
 
-	s, ok := statement.(*ast.BuoyStatement)
+	s, ok := stmt.(*ast.BuoyStatement)
 
 	if !ok {
-		t.Errorf("Statement is not buoy type. got=%T", statement)
+		t.Errorf("Statement is not buoy type. got=%T", stmt)
 		return false
 	}
 

@@ -29,33 +29,36 @@ const (
 	EOF     TokenType = "EOF"
 
 	// Keywords
-	SIPHON  TokenType = "SIPHON"
-	FLICKER TokenType = "FLICKER"
-	BUOY    TokenType = "BUOY"
-	CYCLONE TokenType = "CYCLONE"
-	TRUE    TokenType = "TRUE"
-	FALSE   TokenType = "FALSE"
-	OUTPUT  TokenType = "OUTPUT"
-
-	// Single Character Operators
-	ASSIGN    TokenType = "="
-	GT        TokenType = ">"
-	LT        TokenType = "<"
-	SUM       TokenType = "+"
-	SUBTRACT  TokenType = "-"
-	ASTERISK  TokenType = "*"
-	SLASH     TokenType = "/"
-	BANG      TokenType = "!"
+	SIPHON    TokenType = "SIPHON"
+	FLICKER   TokenType = "FLICKER"
+	BUOY      TokenType = "BUOY"
+	CYCLONE   TokenType = "CYCLONE"
+	TRUE      TokenType = "TRUE"
+	FALSE     TokenType = "FALSE"
+	OUTPUT    TokenType = "OUTPUT"
 	SEMICOLON TokenType = ";"
 	COLON     TokenType = ";"
+	ASSIGN    TokenType = "="
 
-	// Double Character Operators
-	FLOW      TokenType = "->"
+	// Binary Operators
+	SUM      TokenType = "+"
+	SUBTRACT TokenType = "-"
+	ASTERISK TokenType = "*"
+	SLASH    TokenType = "/"
+
+	// Prefix Operators
+	BANG TokenType = "!"
+
+	// Comparison Operators
+	GT        TokenType = ">"
+	LT        TokenType = "<"
 	EQUAL     TokenType = "=="
 	NOT_EQUAL TokenType = "!="
 	GTE       TokenType = ">="
 	LTE       TokenType = "<="
 
+	// Other operators
+	FLOW TokenType = "->"
 	// Identifiers
 	IDENT TokenType = "IDENT"
 
