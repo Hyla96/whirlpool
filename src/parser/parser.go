@@ -7,13 +7,19 @@ import (
 	"whirlpool/src/token"
 )
 
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(expression ast.Expression) ast.Expression
+)
 type Parser struct {
-	l *lexer.Lexer
+	errors []string
 
+	l         *lexer.Lexer
 	curToken  *token.Token
 	nextToken *token.Token
 
-	errors []string
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
@@ -122,4 +128,12 @@ func (p *Parser) expectNext(t token.TokenType) bool {
 
 	p.nextTokenError(t)
 	return false
+}
+
+func (p *Parser) registerPrefixParsingFn(tt token.TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tt] = fn
+}
+
+func (p *Parser) registerInfixParsingFn(tt token.TokenType, fn infixParseFn) {
+	p.infixParseFns[tt] = fn
 }
