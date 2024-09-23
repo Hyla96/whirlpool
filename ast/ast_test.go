@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"github.com/Hyla96/whirlpool/src/token"
+	"github.com/Hyla96/whirlpool/token"
 	"testing"
 )
 

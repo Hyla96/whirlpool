@@ -3,8 +3,8 @@ package repl
 import (
 	"bufio"
 	"fmt"
-	"github.com/Hyla96/whirlpool/src/lexer"
-	"github.com/Hyla96/whirlpool/src/token"
+	"github.com/Hyla96/whirlpool/lexer"
+	"github.com/Hyla96/whirlpool/token"
 	"io"
 )
 

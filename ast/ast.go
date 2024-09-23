@@ -2,7 +2,7 @@ package ast
 
 import (
 	"bytes"
-	"github.com/Hyla96/whirlpool/src/token"
+	"github.com/Hyla96/whirlpool/token"
 )
 
 type Node interface {

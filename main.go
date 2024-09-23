@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Hyla96/whirlpool/src/repl"
+	"github.com/Hyla96/whirlpool/repl"
 	"os"
 	user "os/user"
 )

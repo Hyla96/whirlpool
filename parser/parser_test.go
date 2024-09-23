@@ -2,8 +2,8 @@ package parser
 
 import (
 	"fmt"
-	"github.com/Hyla96/whirlpool/src/ast"
-	"github.com/Hyla96/whirlpool/src/lexer"
+	"github.com/Hyla96/whirlpool/ast"
+	"github.com/Hyla96/whirlpool/lexer"
 	"testing"
 )
 
