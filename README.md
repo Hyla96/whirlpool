@@ -15,6 +15,11 @@ Claude.ai:
 
 Sadly [Whir](https://esolangs.org/wiki/Whirl) already exists and it's far too esoteric for my palate, so **Whirlpool** was born.
 
+
+### Experience it
+You have a REPL (Read Evaluate Print Loop) available, you can play with whirlpool by running:
+`$ go run main.go`
+
 ### Original language specs:
 
 > ---
