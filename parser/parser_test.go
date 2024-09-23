@@ -112,11 +112,13 @@ func TestPrefixExpressions(t *testing.T) {
 
 		exp, ok := stmt.Expression.(*ast.PrefixExpression)
 		if !ok {
-			t.Fatalf("Expected to get PrefixExpression, but got %T", program.Statements[0])
+			t.Fatalf("Expected to get PrefixExpression, but got %T", stmt)
 		}
+
 		if exp.Operator != tt.operator {
 			t.Fatalf("Expected to get %q, but got %q", tt.operator, exp.Operator)
 		}
+
 		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
 			return
 		}
@@ -125,6 +127,54 @@ func TestPrefixExpressions(t *testing.T) {
 
 func TestInfixExpressions(t *testing.T) {
 
+	infixTest := []struct {
+		input    string
+		left     int64
+		operator string
+		right    int64
+	}{
+		{"5 + 5", 5, "+", 5},
+		{"5 - 5", 5, "-", 5},
+		{"5 * 5", 5, "*", 5},
+		{"5 / 5", 5, "/", 5},
+		{"5 > 5", 5, ">", 5},
+		{"5 < 5", 5, "<", 5},
+		{"5 >= 5", 5, ">=", 5},
+		{"5 <= 5", 5, "<=", 5},
+		{"5 == 5", 5, "==", 5},
+		{"5 != 5", 5, "!=", 5},
+	}
+
+	for _, tt := range infixTest {
+		program := getProgram(tt.input, t)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("Statements length not 1, got %d", len(program.Statements))
+		}
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+
+		if !ok {
+			t.Fatalf("Expected to get ExpressionStatement, but got %T", program.Statements[0])
+		}
+
+		exp, ok := stmt.Expression.(*ast.InfixExpression)
+
+		if !ok {
+			t.Fatalf("Expected to get InfixExpression, but got %T", stmt)
+		}
+
+		if !testIntegerLiteral(t, exp.Left, tt.left) {
+
+		}
+		if exp.Operator != tt.operator {
+			t.Fatalf("Expected to get %q, but got %q", tt.operator, exp.Operator)
+		}
+
+		if !testIntegerLiteral(t, exp.Right, tt.right) {
+			return
+		}
+	}
 }
 
 func TestBuoyStatement1(t *testing.T) {
