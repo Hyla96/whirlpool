@@ -2,10 +2,10 @@ package parser
 
 import (
 	"fmt"
+	"github.com/Hyla96/whirlpool/src/ast"
+	"github.com/Hyla96/whirlpool/src/lexer"
+	"github.com/Hyla96/whirlpool/src/token"
 	"strconv"
-	"whirlpool/src/ast"
-	"whirlpool/src/lexer"
-	"whirlpool/src/token"
 )
 
 type (
@@ -69,14 +69,14 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
-	return &ast.Identifier{
+	return &ast.IdentifierExpression{
 		Token: p.curToken,
 		Value: p.curToken.Literal,
 	}
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {
-	literal := &ast.IntegerLiteral{
+	literal := &ast.IntegerLiteralExpression{
 		Token: p.curToken,
 	}
 
@@ -156,7 +156,7 @@ func (p *Parser) parseBuoyStatement() *ast.BuoyStatement {
 		return nil
 	}
 
-	stmt.Name = &ast.Identifier{
+	stmt.Name = &ast.IdentifierExpression{
 		Token: p.curToken,
 		Value: p.curToken.Literal,
 	}

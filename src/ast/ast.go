@@ -1,6 +1,9 @@
 package ast
 
-import "whirlpool/src/token"
+import (
+	"bytes"
+	"github.com/Hyla96/whirlpool/src/token"
+)
 
 type Node interface {
 	TokenLiteral() string
@@ -16,29 +19,50 @@ type Expression interface {
 	Node
 	expressionNode()
 }
+type Program struct {
+	Statements []Statement
+}
 
-type Identifier struct {
+func (p *Program) TokenLiteral() string {
+	if len(p.Statements) > 0 {
+		return p.Statements[0].TokenLiteral()
+	}
+
+	return ""
+}
+func (p *Program) String() string {
+	var out bytes.Buffer
+
+	for _, s := range p.Statements {
+		out.WriteString(s.String())
+	}
+
+	return out.String()
+}
+
+type IdentifierExpression struct {
 	Token *token.Token
 	Value string
 }
 
-type IntegerLiteral struct {
+func (bs *IdentifierExpression) expressionNode() {}
+func (bs *IdentifierExpression) TokenLiteral() string {
+	return bs.Token.Literal
+}
+func (bs *IdentifierExpression) String() string {
+	return bs.Value
+}
+
+type IntegerLiteralExpression struct {
 	Token *token.Token
 	Value int64
 }
 
-func (bs *Identifier) expressionNode() {}
-func (bs *Identifier) TokenLiteral() string {
-	return bs.Token.Literal
-}
-func (bs *Identifier) String() string {
-	return bs.Value
-}
-func (il *IntegerLiteral) expressionNode() {}
-func (il *IntegerLiteral) TokenLiteral() string {
+func (il *IntegerLiteralExpression) expressionNode() {}
+func (il *IntegerLiteralExpression) TokenLiteral() string {
 	return il.Token.Literal
 }
-func (il *IntegerLiteral) String() string {
+func (il *IntegerLiteralExpression) String() string {
 	return il.TokenLiteral()
 }
 

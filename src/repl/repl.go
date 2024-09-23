@@ -3,9 +3,9 @@ package repl
 import (
 	"bufio"
 	"fmt"
+	"github.com/Hyla96/whirlpool/src/lexer"
+	"github.com/Hyla96/whirlpool/src/token"
 	"io"
-	"whirlpool/src/lexer"
-	"whirlpool/src/token"
 )
 
 const PROMPT = ">> "

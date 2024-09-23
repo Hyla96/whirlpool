@@ -2,9 +2,9 @@ package parser
 
 import (
 	"fmt"
+	"github.com/Hyla96/whirlpool/src/ast"
+	"github.com/Hyla96/whirlpool/src/lexer"
 	"testing"
-	"whirlpool/src/ast"
-	"whirlpool/src/lexer"
 )
 
 func TestOutputStatement1(t *testing.T) {
@@ -47,7 +47,7 @@ func TestIntegerLiteralExpression(t *testing.T) {
 		t.Error("Statement is not ExpressionStatement")
 	}
 
-	literal, ok := stmt.Expression.(*ast.IntegerLiteral)
+	literal, ok := stmt.Expression.(*ast.IntegerLiteralExpression)
 
 	if !ok {
 		t.Error("Expression is not int literal")
@@ -76,14 +76,14 @@ func TestIdentifierExpression(t *testing.T) {
 		t.Error("Statement is not ExpressionStatement")
 	}
 
-	iden, ok := stmt.Expression.(*ast.Identifier)
+	iden, ok := stmt.Expression.(*ast.IdentifierExpression)
 
 	if !ok {
 		t.Error("Expression is not identifier")
 	}
 
 	if iden.Value != "num" {
-		t.Errorf("Identifier is not num, got=%q", iden.Value)
+		t.Errorf("IdentifierExpression is not num, got=%q", iden.Value)
 	}
 }
 
@@ -121,6 +121,10 @@ func TestPrefixExpressions(t *testing.T) {
 			return
 		}
 	}
+}
+
+func TestInfixExpressions(t *testing.T) {
+
 }
 
 func TestBuoyStatement1(t *testing.T) {
@@ -204,9 +208,9 @@ func checkParserError(t *testing.T, p *Parser) {
 }
 
 func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
-	integ, ok := il.(*ast.IntegerLiteral)
+	integ, ok := il.(*ast.IntegerLiteralExpression)
 	if !ok {
-		t.Errorf("expected IntegerLiteral, but got %T", integ)
+		t.Errorf("expected IntegerLiteralExpression, but got %T", integ)
 		return false
 	}
 

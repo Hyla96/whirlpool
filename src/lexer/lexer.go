@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"whirlpool/src/token"
+	"github.com/Hyla96/whirlpool/src/token"
 )
 
 type Lexer struct {

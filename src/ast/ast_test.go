@@ -1,8 +1,8 @@
 package ast
 
 import (
+	"github.com/Hyla96/whirlpool/src/token"
 	"testing"
-	"whirlpool/src/token"
 )
 
 func TestString(t *testing.T) {
@@ -13,14 +13,14 @@ func TestString(t *testing.T) {
 					Type:    token.BUOY,
 					Literal: "buoy",
 				},
-				Name: &Identifier{
+				Name: &IdentifierExpression{
 					Token: &token.Token{
 						Type:    token.IDENT,
 						Literal: "something",
 					},
 					Value: "something",
 				},
-				Value: &Identifier{
+				Value: &IdentifierExpression{
 					Token: &token.Token{
 						Type:    token.INT,
 						Literal: "10",

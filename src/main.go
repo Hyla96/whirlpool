@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/Hyla96/whirlpool/src/repl"
 	"os"
 	user "os/user"
-	"whirlpool/src/repl"
 )
 
 func main() {

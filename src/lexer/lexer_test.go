@@ -1,8 +1,8 @@
 package lexer
 
 import (
+	"github.com/Hyla96/whirlpool/src/token"
 	"testing"
-	"whirlpool/src/token"
 )
 
 func TestNextToken1(t *testing.T) {
