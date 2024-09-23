@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"testing"
 	"whirlpool/src/ast"
 	"whirlpool/src/lexer"
@@ -13,14 +14,6 @@ func TestOutputStatement1(t *testing.T) {
 	output z;
 	`
 	program := getProgram(input, t)
-	//tests := []struct {
-	//	expectedIdentifier string
-	//}{
-	//	{"5"},
-	//	{"10"},
-	//	{"z"},
-	//}
-
 	if len(program.Statements) != 3 {
 		t.Fatalf("ParseProgram returned %q statements instead of 3", len(program.Statements))
 	}
@@ -34,6 +27,98 @@ func TestOutputStatement1(t *testing.T) {
 
 		if outputStmt.TokenLiteral() != "output" {
 			t.Errorf("literal not output, got %q", stmt.TokenLiteral())
+		}
+	}
+}
+
+func TestIntegerLiteralExpression(t *testing.T) {
+	input := `
+	5;
+	`
+	program := getProgram(input, t)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("ParseProgram returned %d statements instead of 1", len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+
+	if !ok {
+		t.Error("Statement is not ExpressionStatement")
+	}
+
+	literal, ok := stmt.Expression.(*ast.IntegerLiteral)
+
+	if !ok {
+		t.Error("Expression is not int literal")
+	}
+
+	if literal.Value != 5 {
+		t.Errorf("Literal is not 5, got=%q", literal.Value)
+	}
+	if literal.TokenLiteral() != "5" {
+		t.Errorf("TokenLiteral is not 5, got=%q", literal.TokenLiteral())
+	}
+}
+func TestIdentifierExpression(t *testing.T) {
+	input := `
+	num;
+	`
+	program := getProgram(input, t)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("ParseProgram returned %d statements instead of 1", len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+
+	if !ok {
+		t.Error("Statement is not ExpressionStatement")
+	}
+
+	iden, ok := stmt.Expression.(*ast.Identifier)
+
+	if !ok {
+		t.Error("Expression is not identifier")
+	}
+
+	if iden.Value != "num" {
+		t.Errorf("Identifier is not num, got=%q", iden.Value)
+	}
+}
+
+func TestPrefixExpressions(t *testing.T) {
+	prefixTest := []struct {
+		input        string
+		operator     string
+		integerValue int64
+	}{
+		{"!5;", "!", 5},
+		{"-15;", "-", 15},
+	}
+
+	for _, tt := range prefixTest {
+		program := getProgram(tt.input, t)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("Statements length not 1, got %d", len(program.Statements))
+		}
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+
+		if !ok {
+			t.Fatalf("Expected to get ExpressionStatement, but got %T", program.Statements[0])
+		}
+
+		exp, ok := stmt.Expression.(*ast.PrefixExpression)
+		if !ok {
+			t.Fatalf("Expected to get PrefixExpression, but got %T", program.Statements[0])
+		}
+		if exp.Operator != tt.operator {
+			t.Fatalf("Expected to get %q, but got %q", tt.operator, exp.Operator)
+		}
+		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
+			return
 		}
 	}
 }
@@ -116,4 +201,24 @@ func checkParserError(t *testing.T, p *Parser) {
 		t.Errorf("parser error: %q", msg)
 	}
 	t.FailNow()
+}
+
+func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
+	integ, ok := il.(*ast.IntegerLiteral)
+	if !ok {
+		t.Errorf("expected IntegerLiteral, but got %T", integ)
+		return false
+	}
+
+	if integ.Value != value {
+		t.Errorf("expected Value %d, got %d", value, integ.Value)
+		return false
+	}
+
+	if integ.TokenLiteral() != fmt.Sprintf("%d", value) {
+		t.Errorf("expected TokenLiteral to return %d, got %s", value, integ.TokenLiteral())
+		return false
+	}
+
+	return true
 }

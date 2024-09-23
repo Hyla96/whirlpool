@@ -22,12 +22,24 @@ type Identifier struct {
 	Value string
 }
 
+type IntegerLiteral struct {
+	Token *token.Token
+	Value int64
+}
+
 func (bs *Identifier) expressionNode() {}
 func (bs *Identifier) TokenLiteral() string {
 	return bs.Token.Literal
 }
 func (bs *Identifier) String() string {
 	return bs.Value
+}
+func (il *IntegerLiteral) expressionNode() {}
+func (il *IntegerLiteral) TokenLiteral() string {
+	return il.Token.Literal
+}
+func (il *IntegerLiteral) String() string {
+	return il.TokenLiteral()
 }
 
 type ExpressionStatement struct {

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 	"whirlpool/src/ast"
 	"whirlpool/src/lexer"
 	"whirlpool/src/token"
@@ -11,6 +12,20 @@ type (
 	prefixParseFn func() ast.Expression
 	infixParseFn  func(expression ast.Expression) ast.Expression
 )
+
+type precedence int
+
+const (
+	_ precedence = iota
+	LOWEST
+	EQUALS
+	LESSGREATER
+	SUM
+	PRODUCT
+	PREFIX
+	CALL
+)
+
 type Parser struct {
 	errors []string
 
@@ -24,14 +39,56 @@ type Parser struct {
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
-		l:      l,
-		errors: []string{},
+		l:              l,
+		errors:         []string{},
+		prefixParseFns: make(map[token.TokenType]prefixParseFn),
+		infixParseFns:  make(map[token.TokenType]infixParseFn),
 	}
+
+	p.registerPrefixParsingFn(token.IDENT, p.parseIdentifier)
+	p.registerPrefixParsingFn(token.INT, p.parseIntegerLiteral)
+	p.registerPrefixParsingFn(token.BANG, p.parsePrefixExpression)
+	p.registerPrefixParsingFn(token.SUBTRACT, p.parsePrefixExpression)
 
 	p.readToken()
 	p.readToken()
 
 	return p
+}
+
+func (p *Parser) parsePrefixExpression() ast.Expression {
+	exp := &ast.PrefixExpression{
+		Token:    p.curToken,
+		Operator: p.curToken.Literal,
+	}
+
+	p.readToken()
+	right := p.parseExpression(PREFIX)
+	exp.Right = right
+	return exp
+}
+
+func (p *Parser) parseIdentifier() ast.Expression {
+	return &ast.Identifier{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
+}
+
+func (p *Parser) parseIntegerLiteral() ast.Expression {
+	literal := &ast.IntegerLiteral{
+		Token: p.curToken,
+	}
+
+	value, err := strconv.ParseInt(p.curToken.Literal, 0, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as integer", p.curToken.Literal)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	literal.Value = value
+	return literal
 }
 
 func (p *Parser) readToken() {
@@ -63,6 +120,11 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
+func (p *Parser) noPrefixParseFnError(t token.TokenType) {
+	msg := fmt.Sprintf("no prefix parse function for %s found", t)
+	p.errors = append(p.errors, msg)
+}
+
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.BUOY:
@@ -70,7 +132,7 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.OUTPUT:
 		return p.parseOutputStatement()
 	default:
-		return nil
+		return p.parseExpressionStatement()
 	}
 
 }
@@ -112,6 +174,32 @@ func (p *Parser) parseBuoyStatement() *ast.BuoyStatement {
 	return stmt
 }
 
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	stmt := &ast.ExpressionStatement{
+		Token: p.curToken,
+	}
+
+	stmt.Expression = p.parseExpression(LOWEST)
+
+	if p.nextTokenIs(token.SEMICOLON) { // this makes semicolon optional
+		p.readToken()
+	}
+
+	return stmt
+}
+func (p *Parser) parseExpression(t precedence) ast.Expression {
+	prefix := p.prefixParseFns[p.curToken.Type]
+
+	if prefix == nil {
+		p.noPrefixParseFnError(p.curToken.Type)
+		return nil
+	}
+
+	leftExp := prefix()
+
+	return leftExp
+
+}
 func (p *Parser) currentTokenIs(t token.TokenType) bool {
 	return p.curToken.Type == t
 }
