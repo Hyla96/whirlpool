@@ -53,16 +53,29 @@ func (bs *IdentifierExpression) String() string {
 	return bs.Value
 }
 
-type IntegerLiteralExpression struct {
+type IntegerLiteral struct {
 	Token *token.Token
 	Value int64
 }
 
-func (il *IntegerLiteralExpression) expressionNode() {}
-func (il *IntegerLiteralExpression) TokenLiteral() string {
+func (il *IntegerLiteral) expressionNode() {}
+func (il *IntegerLiteral) TokenLiteral() string {
 	return il.Token.Literal
 }
-func (il *IntegerLiteralExpression) String() string {
+func (il *IntegerLiteral) String() string {
+	return il.TokenLiteral()
+}
+
+type Boolean struct {
+	Token *token.Token
+	Value bool
+}
+
+func (il *Boolean) expressionNode() {}
+func (il *Boolean) TokenLiteral() string {
+	return il.Token.Literal
+}
+func (il *Boolean) String() string {
 	return il.TokenLiteral()
 }
 
