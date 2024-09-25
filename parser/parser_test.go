@@ -203,6 +203,31 @@ func TestBuoyStatement1(t *testing.T) {
 	}
 }
 
+func TestPrecedenceParsing(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"5 + 5", "(5 + 5)"},
+		{"-a * b", "((-a) * b)"},
+		{"!-a", "(!(-a))"},
+		{"a + b + c", "((a + b) + c)"},
+		{"a + b * c", "(a + (b * c))"},
+		{"a + b / c", "(a + (b / c))"},
+		{"3 + 4; -5 * 5", "(3 + 4)((-5) * 5)"},
+		{"3 + 4 == -5 * 5", "((3 + 4) == ((-5) * 5))"},
+	}
+
+	for _, tt := range tests {
+		program := getProgram(tt.input, t)
+		actual := program.String()
+		if actual != tt.expected {
+			t.Errorf("expected %q, got %q", tt.expected, actual)
+		}
+	}
+
+}
+
 func getProgram(input string, t *testing.T) *ast.Program {
 	lex := lexer.New(input)
 	pars := New(lex)
