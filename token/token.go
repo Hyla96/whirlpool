@@ -38,6 +38,8 @@ const (
 	OUTPUT    TokenType = "OUTPUT"
 	SEMICOLON TokenType = ";"
 	COLON     TokenType = ";"
+	LP        TokenType = "("
+	RP        TokenType = ")"
 	ASSIGN    TokenType = "="
 
 	// Binary Operators

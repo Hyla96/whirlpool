@@ -44,10 +44,13 @@ func (l *Lexer) NextToken() *token.Token {
 		return l.getNumber()
 	}
 
-	return &token.Token{
+	token := &token.Token{
 		Type:    token.ILLEGAL,
-		Literal: "Token not valid",
+		Literal: string(l.ch),
 	}
+	l.readChar()
+
+	return token
 }
 
 func (l *Lexer) readChar() {
@@ -85,6 +88,10 @@ func (l *Lexer) getSingleCharacter() *token.Token {
 		tok = newToken(token.SEMICOLON, l.ch)
 	case ':':
 		tok = newToken(token.COLON, l.ch)
+	case '(':
+		tok = newToken(token.LP, l.ch)
+	case ')':
+		tok = newToken(token.RP, l.ch)
 	case 0:
 		tok = newToken(token.EOF, l.ch)
 	}
